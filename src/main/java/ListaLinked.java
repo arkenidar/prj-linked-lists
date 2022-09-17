@@ -1,5 +1,6 @@
 // https://replit.com/@dariocangialosi/liste-collegate-liste-linked#main.c
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
@@ -78,6 +79,40 @@ public class ListaLinked<T> implements Iterable<T> {
         while (scorre != null) {
             System.out.println(scorre.contenuto);
             scorre = scorre.precedente;
+        }
+    }
+
+    public void ordina(Comparator<T> comparatore) {
+        invalidateCache();
+        
+        while (true) {
+
+            boolean esci = true;
+
+            Nodo<T> scorre;
+            scorre = primo;
+            while (scorre != null) {
+                T x = scorre.contenuto;
+                if (scorre.successivo != null) {
+                    T y = scorre.successivo.contenuto;
+                    int comparazione = comparatore.compare(x, y);
+                    if (comparazione > 0) {
+                        T temp;
+                        temp = x;
+                        x = y;
+                        y = temp;
+
+                        scorre.contenuto = x;
+                        scorre.successivo.contenuto = y;
+
+                        esci = false;
+                    }
+                }
+
+                scorre = scorre.successivo;
+            } // while scorrimento
+
+            if (esci) break;
         }
     }
 

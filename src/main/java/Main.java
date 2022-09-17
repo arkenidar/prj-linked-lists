@@ -1,5 +1,7 @@
 // https://replit.com/@dariocangialosi/liste-collegate-liste-linked#main.c
 
+import java.util.Comparator;
+
 public class Main {
     private static int progressivo = 1;
 
@@ -121,6 +123,11 @@ public class Main {
             String elemento = lista.prendi(indice);
             scrivi(elemento);
         }
+
+        linea();
+        System.out.println("ordinamento inverso");
+        lista.ordina(Comparator.reverseOrder());
+        lista.forEach(Main::scrivi);
     }
 
     public static void scrivi(String testo) {
