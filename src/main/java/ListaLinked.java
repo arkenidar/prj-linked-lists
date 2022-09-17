@@ -10,6 +10,7 @@ public class ListaLinked<T> implements Iterable<T> {
     private int indiceCache;
 
     public void rimuoviNodo(Nodo<T> quale) {
+        invalidateCache();
         if (quale == null) return;
         if (quale == primo) primo = quale.successivo;
         if (quale == ultimo) ultimo = quale.precedente;
@@ -52,6 +53,7 @@ public class ListaLinked<T> implements Iterable<T> {
     }
 
     public void aggiungi(T elemento) {
+        invalidateCache();
         Nodo<T> corrente = new Nodo<>();
         corrente.contenuto = elemento;
         corrente.successivo = null;
@@ -80,11 +82,13 @@ public class ListaLinked<T> implements Iterable<T> {
     }
 
     public void svuota() {
+        invalidateCache();
         primo = null;
         ultimo = null;
     }
 
     public boolean rimuovi(int indice) {
+        invalidateCache();
         Nodo<T> nodo = prendiNodo(indice);
         if (nodo == null) return false;
         rimuoviNodo(nodo);
@@ -149,6 +153,10 @@ public class ListaLinked<T> implements Iterable<T> {
     @Override
     public void forEach(Consumer<? super T> action) {
         Iterable.super.forEach(action);
+    }
+
+    private void invalidateCache() {
+        nodoCache = null;
     }
 }
 
