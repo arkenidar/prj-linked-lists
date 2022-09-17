@@ -1,7 +1,13 @@
 // https://replit.com/@dariocangialosi/liste-collegate-liste-linked#main.c
 
-public class ListaLinked<T> {
+import java.util.Iterator;
+import java.util.function.Consumer;
+
+public class ListaLinked<T> implements Iterable<T> {
     private Nodo<T> primo, ultimo;
+
+    private Nodo<T> nodoCache;
+    private int indiceCache;
 
     public void rimuoviNodo(Nodo<T> quale) {
         if (quale == null) return;
@@ -12,11 +18,29 @@ public class ListaLinked<T> {
     }
 
     public Nodo<T> prendiNodo(int indice) {
+
+        if (nodoCache != null) {
+            if (indice == (indiceCache + 1)) {
+                nodoCache = nodoCache.successivo;
+                indiceCache = indice;
+                return nodoCache;
+            } else if (indice == (indiceCache - 1)) {
+                nodoCache = nodoCache.precedente;
+                indiceCache = indice;
+                return nodoCache;
+            } else if (indice == indiceCache) {
+                return nodoCache;
+            }
+        }
+
         Nodo<T> scorre = primo;
         for (int i = 0; scorre != null; i++) {
-            if (i == indice)
+            if (i == indice) {
+                nodoCache = scorre;
+                indiceCache = indice;
                 return scorre;
-            scorre = scorre.successivo;
+            }
+            scorre = scorre.successivo; // questo rigo non viene usato, se il caching lo previene (breakpoint per verificare!)
         }
         return null;
     }
@@ -37,7 +61,7 @@ public class ListaLinked<T> {
         ultimo = corrente;
     }
 
-    public void scorri() {
+    public void scorriStampando() {
         Nodo<T> scorre;
         scorre = primo;
         while (scorre != null) {
@@ -95,6 +119,36 @@ public class ListaLinked<T> {
             indice++;
         }
         return indice;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        Iterator<T> iterator = new Iterator<>() {
+
+            private final int dimensione = dimensione();
+            private int corrente = 0;
+
+            @Override
+            public boolean hasNext() {
+                return corrente < dimensione && prendi(corrente) != null;
+            }
+
+            @Override
+            public T next() {
+                return prendi(corrente++);
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+        return iterator;
+    }
+
+    @Override
+    public void forEach(Consumer<? super T> action) {
+        Iterable.super.forEach(action);
     }
 }
 

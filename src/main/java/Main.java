@@ -3,21 +3,25 @@
 public class Main {
     private static int progressivo = 1;
 
-    public static void main(String[] args) {
-
+    public static void linea() {
         final String linea = "-----------------------";
+        scrivi(linea);
+    }
 
+    public static void main(String[] args) {
         scrivi("Hello LinkedLists !");
-        scrivi(linea);
+        linea();
 
-        test1();
-        scrivi(linea);
+        test2(); // #2
+        linea();
 
+        /*
         testListaInteri();
-        scrivi(linea);
+        linea();
 
         testStringa();
-        scrivi(linea);
+        linea();
+        */
     }
 
     public static void testListaInteri() {
@@ -82,12 +86,41 @@ public class Main {
             lista.aggiungi(String.valueOf(n));
         }
 
-        lista.scorri();
+        lista.scorriStampando();
         lista.scorriInverso();
 
         lista.rimuoviNodo(lista.prendiNodo(2));
-        lista.scorri();
+        lista.scorriStampando();
 
+    }
+
+    public static void test2() {
+        ListaLinked<String> lista = new ListaLinked<>();
+        for (int n = 1; n <= 3; n++) {
+            lista.aggiungi(String.valueOf(n));
+        }
+
+        for (String stringa : lista) scrivi(stringa);
+
+        linea();
+
+        lista.forEach(Main::scrivi); // method reference
+        lista.forEach(elemento -> scrivi(elemento)); // lambda expression
+
+        linea();
+
+        //lista.stream
+        //Collections.sort(lista, Collections.reverseOrder());
+        //Collections.reverse(lista);
+        for (int indice = 0; indice < lista.dimensione(); indice++) {
+            String elemento = lista.prendi(indice);
+            scrivi(elemento);
+        }
+
+        for (int indice = lista.dimensione() - 1; indice >= 0; indice--) {
+            String elemento = lista.prendi(indice);
+            scrivi(elemento);
+        }
     }
 
     public static void scrivi(String testo) {
