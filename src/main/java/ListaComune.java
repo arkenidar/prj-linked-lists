@@ -1,4 +1,4 @@
-public abstract class ListaComune<T> implements Lista<T> {
+public class ListaComune<T> implements Lista<T> {
     protected final ListaLinked<T> list = new ListaLinked<>();
 
     public T get(int index) {
